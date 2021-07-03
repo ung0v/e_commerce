@@ -11,10 +11,10 @@ import {
   CssBaseline,
 } from "@material-ui/core";
 import useStyles from "./style";
-import AddressForm from "../AddressForm";
-import PaymentForm from "../PaymentForm";
-import Review from "../Review";
-import { commerce } from "../../../lib/commerce";
+import AddressForm from "../../components/CheckoutForm/AddressForm";
+import PaymentForm from "../../components/CheckoutForm/PaymentForm";
+import Review from "../../components/CheckoutForm/Review";
+import { commerce } from "../../lib/commerce";
 import { Link, useHistory } from "react-router-dom";
 
 const steps = ["Shipping address", "Payment details"];
@@ -70,7 +70,7 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
   };
   useEffect(() => {
     generateToken();
-  }, [cart]);
+  }, [cart, generateToken]);
 
   let Confirmation = () =>
     order ? (

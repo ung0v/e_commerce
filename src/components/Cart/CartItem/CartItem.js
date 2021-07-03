@@ -6,9 +6,24 @@ import {
   CardContent,
   CardMedia,
 } from "@material-ui/core";
+import { useDispatch } from "react-redux";
+import {
+  removeCartAsync,
+  replaceCartAsync,
+} from "../../../features/cart/cart-slice";
 import useStyles from "./style";
-const CartItem = ({ item, onRemoveCart, onUpdateCart }) => {
+const CartItem = ({ item }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const increaseCart = (id, quantity) => {
+    dispatch(replaceCartAsync({ LineItemId: id, quantity: quantity + 1 }));
+  };
+
+  const decreaseCart = (id, quantity) => {
+    dispatch(replaceCartAsync({ LineItemId: id, quantity: quantity - 1 }));
+  };
+
   return (
     <Card>
       <CardMedia
@@ -29,7 +44,7 @@ const CartItem = ({ item, onRemoveCart, onUpdateCart }) => {
           <Button
             type="button"
             size="small"
-            onClick={() => onUpdateCart(item.id, item.quantity - 1)}
+            onClick={() => decreaseCart(item.id, item.quantity)}
           >
             -
           </Button>
@@ -37,7 +52,7 @@ const CartItem = ({ item, onRemoveCart, onUpdateCart }) => {
           <Button
             type="button"
             size="small"
-            onClick={() => onUpdateCart(item.id, item.quantity + 1)}
+            onClick={() => increaseCart(item.id, item.quantity)}
           >
             +
           </Button>
@@ -46,7 +61,7 @@ const CartItem = ({ item, onRemoveCart, onUpdateCart }) => {
           variant="contained"
           type="button"
           color="secondary"
-          onClick={() => onRemoveCart(item.id)}
+          onClick={() => dispatch(removeCartAsync({ productId: item.id }))}
         >
           Remove
         </Button>

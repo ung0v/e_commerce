@@ -13,6 +13,15 @@ export default makeStyles(() => ({
   },
   cardContent: {
     display: "flex",
+    flexDirection: "column",
     justifyContent: "space-between",
+  },
+  cardTitle: {
+    overflow: "hidden",
+    /* text-overflow: ellipsis; */
+    // "-webkit-box-orient": 3,
+    "-webkit-line-clamp": 2,
+    "-webkit-box-orient": "vertical",
+    display: "-webkit-box",
   },
 }));
