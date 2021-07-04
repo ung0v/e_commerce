@@ -16,29 +16,35 @@ import PaymentForm from "../../components/CheckoutForm/PaymentForm";
 import Review from "../../components/CheckoutForm/Review";
 import { commerce } from "../../lib/commerce";
 import { Link, useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { generateTokenAsync } from "../../features/checkout/checkout-slice";
+import { refreshCartAsync } from "../../features/cart/cart-slice";
 
 const steps = ["Shipping address", "Payment details"];
 
-const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
+const Checkout = () => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
-  const [checkoutToken, setCheckoutToken] = useState(null);
   const [shippingData, setShippingData] = useState();
+
+  const cart = useSelector((state) => state.cart);
+  const {
+    order,
+    loading: IsLoading,
+    errorMessage: error,
+    token: checkoutToken,
+  } = useSelector((state) => state.checkout);
+  const dispatch = useDispatch();
 
   const history = useHistory();
 
   function getStepContent(stepIndex) {
     switch (stepIndex) {
       case 0:
-        return <AddressForm checkoutToken={checkoutToken} next={next} />;
+        return <AddressForm next={next} />;
       case 1:
         return (
-          <PaymentForm
-            checkoutToken={checkoutToken}
-            shippingData={shippingData}
-            onCaptureCheckout={onCaptureCheckout}
-            nextStep={handleNext}
-          />
+          <PaymentForm shippingData={shippingData} nextStep={handleNext} />
         );
       case 2:
         return <Review />;
@@ -60,20 +66,23 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
     handleNext();
   };
 
-  const generateToken = async () => {
+  useEffect(() => {
     try {
-      const token = await commerce.checkout.generateTokenFrom("cart", cart.id);
-      setCheckoutToken(token);
+      dispatch(generateTokenAsync(cart));
     } catch (error) {
       history.push("/");
     }
-  };
-  useEffect(() => {
-    generateToken();
-  }, [cart, generateToken]);
+  }, [cart, dispatch, history]);
 
+  useEffect(() => {
+    if (!cart.hasOwnProperty("line_items")) {
+      window.location.href = "/";
+    }
+  }, [cart]);
+  console.log(error);
+  console.log(order);
   let Confirmation = () =>
-    order ? (
+    order?.customer ? (
       <>
         <Typography variant="h5" gutterBottom>
           Thank you for your purchase, {order.customer.firstname}{" "}
@@ -90,6 +99,9 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
         <Button component={Link} variant="outlined" type="button" to="/">
           Back to home
         </Button>
+        {setTimeout(() => {
+          dispatch(refreshCartAsync());
+        }, 5000)}
       </>
     ) : (
       <div className={classes.spinner}>
@@ -97,7 +109,7 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
       </div>
     );
 
-  if (error) {
+  if (error && !IsLoading) {
     Confirmation = () => (
       <div>
         <Typography variant="h5">Error: {error}</Typography>

@@ -50,14 +50,12 @@ export const emptyCartAsync = createAsyncThunk(
 export const refreshCartAsync = createAsyncThunk(
   "e_commerce/fetchCartAsync",
   async () => {
-    const { cart } = await commerce.cart.empty();
+    const { cart } = await commerce.cart.refresh();
     return cart;
   }
 );
 
-const initialState = {
-  cart: {},
-};
+const initialState = {};
 
 export const cartSlice = createSlice({
   name: "cart",

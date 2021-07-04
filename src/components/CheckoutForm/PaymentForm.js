@@ -5,17 +5,17 @@ import {
   ElementsConsumer,
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+
+import { useDispatch, useSelector } from "react-redux";
+import { refreshCartAsync } from "../../features/cart/cart-slice";
+import { captureCheckoutAsync } from "../../features/checkout/checkout-slice";
 import Review from "./Review";
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
-const PaymentForm = ({
-  checkoutToken,
-  shippingData,
-  backStep,
-  onCaptureCheckout,
-  nextStep,
-}) => {
+const PaymentForm = ({ shippingData, backStep, nextStep }) => {
+  const { token: checkoutToken } = useSelector((state) => state.checkout);
+  const dispatch = useDispatch();
   const handleSubmit = async (event, elements, stripe) => {
     event.preventDefault();
 
@@ -30,7 +30,6 @@ const PaymentForm = ({
     if (error) {
       console.log(error);
     } else {
-      console.log(shippingData);
       const orderData = {
         line_items: checkoutToken.live.line_items,
         customer: {
@@ -54,12 +53,14 @@ const PaymentForm = ({
           },
         },
       };
-      console.log(orderData);
-      onCaptureCheckout(checkoutToken.id, orderData);
+      dispatch(
+        captureCheckoutAsync({ checkoutTokenId: checkoutToken.id, orderData })
+      );
 
       nextStep();
     }
   };
+
   return (
     <>
       <Review checkoutToken={checkoutToken} />

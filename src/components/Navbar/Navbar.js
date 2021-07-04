@@ -24,7 +24,7 @@ const Navbar = () => {
     dispatch(fetchCartAsync());
   }, [dispatch]);
 
-  console.log(cart);
+  // console.log(cart);
   return (
     <>
       <AppBar position="fixed" className={classes.appBar}>

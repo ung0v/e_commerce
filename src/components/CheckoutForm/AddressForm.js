@@ -12,13 +12,15 @@ import { commerce } from "../../lib/commerce";
 import { FormProvider, useForm } from "react-hook-form";
 import FormInput from "./CustomTextField";
 import { Link } from "react-router-dom";
-const AddressForm = ({ checkoutToken, next }) => {
+import { useSelector } from "react-redux";
+const AddressForm = ({ next }) => {
+  const { token: checkoutToken } = useSelector((state) => state.checkout);
   const [shippingCountries, setShippingCountries] = useState([]);
   const [shippingCountry, setShippingCountry] = useState("");
   const [shippingSubdivisions, setShippingSubdivisions] = useState([]);
   const [shippingSubdivision, setShippingSubdivision] = useState("");
   const [shippingOptions, setShippingOptions] = useState([]);
-  const [shippingOption, setShippingOption] = useState();
+  const [shippingOption, setShippingOption] = useState("");
 
   const methods = useForm();
 
