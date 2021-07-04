@@ -2,6 +2,7 @@ import Product from "../../components/Product/Product";
 import useStyles from "./style";
 
 import { Grid, Container } from "@material-ui/core";
+import { Pagination } from "@material-ui/lab";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -33,6 +34,13 @@ const Products = ({ onAddToCart }) => {
               </Grid>
             );
           })}
+          <Pagination
+            count={100}
+            siblingCount={1}
+            color="primary"
+            // variant="outlined"
+            style={{ justifyContent: "center" }}
+          />
         </Grid>
       </Container>
     </main>

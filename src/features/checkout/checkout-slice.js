@@ -30,6 +30,7 @@ const initialState = {
   loading: false,
   errorMessage: null,
   token: null,
+  finished: false,
 };
 
 const checkoutSlice = createSlice({
@@ -44,13 +45,12 @@ const checkoutSlice = createSlice({
     },
     [captureCheckoutAsync.rejected]: (state, action) => {
       state.loading = false;
-      console.log(action);
       state.errorMessage = action.payload;
     },
     [captureCheckoutAsync.fulfilled]: (state, action) => {
       state.loading = false;
-      console.log(action);
       state.order = action.payload;
+      state.finished = true;
     },
     [generateTokenAsync.fulfilled]: (state, action) => {
       state.token = action.payload;

@@ -5,7 +5,6 @@ export const fetchCartAsync = createAsyncThunk(
   "e_commerce/fetchCartAsync",
   async () => {
     const cart = await commerce.cart.retrieve();
-    console.log(cart);
     return cart;
   }
 );
@@ -50,7 +49,7 @@ export const emptyCartAsync = createAsyncThunk(
 export const refreshCartAsync = createAsyncThunk(
   "e_commerce/fetchCartAsync",
   async () => {
-    const { cart } = await commerce.cart.refresh();
+    const cart = await commerce.cart.refresh();
     return cart;
   }
 );

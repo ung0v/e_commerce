@@ -14,7 +14,7 @@ import useStyles from "./style";
 import AddressForm from "../../components/CheckoutForm/AddressForm";
 import PaymentForm from "../../components/CheckoutForm/PaymentForm";
 import Review from "../../components/CheckoutForm/Review";
-import { commerce } from "../../lib/commerce";
+
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { generateTokenAsync } from "../../features/checkout/checkout-slice";
@@ -30,9 +30,10 @@ const Checkout = () => {
   const cart = useSelector((state) => state.cart);
   const {
     order,
-    loading: IsLoading,
+    loading: isLoading,
     errorMessage: error,
     token: checkoutToken,
+    finished,
   } = useSelector((state) => state.checkout);
   const dispatch = useDispatch();
 
@@ -79,10 +80,15 @@ const Checkout = () => {
       window.location.href = "/";
     }
   }, [cart]);
-  console.log(error);
+
+  useEffect(() => {
+    if (finished) {
+      dispatch(refreshCartAsync());
+    }
+  }, [finished]);
   console.log(order);
   let Confirmation = () =>
-    order?.customer ? (
+    order?.customer && (
       <>
         <Typography variant="h5" gutterBottom>
           Thank you for your purchase, {order.customer.firstname}{" "}
@@ -99,17 +105,18 @@ const Checkout = () => {
         <Button component={Link} variant="outlined" type="button" to="/">
           Back to home
         </Button>
-        {setTimeout(() => {
-          dispatch(refreshCartAsync());
-        }, 5000)}
       </>
-    ) : (
+    );
+
+  if (isLoading) {
+    Confirmation = () => (
       <div className={classes.spinner}>
         <CircularProgress />
       </div>
     );
+  }
 
-  if (error && !IsLoading) {
+  if (error && !isLoading) {
     Confirmation = () => (
       <div>
         <Typography variant="h5">Error: {error}</Typography>

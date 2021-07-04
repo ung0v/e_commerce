@@ -12,7 +12,7 @@ export default makeStyles((theme) => ({
     },
   },
   title: {
-    flexGrow: 1,
+    // flexGrow: 1,
     alignItems: "center",
     display: "flex",
     textDecoration: "none",
@@ -37,7 +37,7 @@ export default makeStyles((theme) => ({
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
     marginRight: theme.spacing(2),
-    marginLeft: 0,
+    marginLeft: "24px",
     width: "100%",
     [theme.breakpoints.up("sm")]: {
       width: "auto",
@@ -55,14 +55,14 @@ export default makeStyles((theme) => ({
   inputRoot: {
     color: "inherit",
   },
-  inputInput: {
+  inputInput: {    
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("md")]: {
-      width: "20ch",
+      width: "50ch",
     },
   },
 }));
