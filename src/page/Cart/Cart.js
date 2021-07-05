@@ -1,7 +1,7 @@
 import { Container, Typography, Button, Grid } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import CartItem from "../../components/Cart/CartItem/CartItem";
+import CartItem from "../../components/Cart/CartItem";
 import { emptyCartAsync } from "../../features/cart/cart-slice";
 import useStyles from "./style";
 const Cart = () => {

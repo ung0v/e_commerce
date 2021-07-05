@@ -21,6 +21,7 @@ const Products = ({ onAddToCart }) => {
   const [page, setPage] = useState(1);
 
   const reverseProducts = [...products].reverse();
+  // const reverseProducts = [].concat(products).reverse();
 
   const data = [
     ...products,
@@ -65,15 +66,17 @@ const Products = ({ onAddToCart }) => {
               );
             }
           )}
-          <Pagination
-            count={count}
-            page={page}
-            // siblingCount={1}
-            color="primary"
-            // variant="outlined"
-            style={{ justifyContent: "center" }}
-            onChange={handleChange}
-          />
+          {products && (
+            <Pagination
+              count={count}
+              page={page}
+              // siblingCount={1}
+              color="primary"
+              // variant="outlined"
+              style={{ justifyContent: "center" }}
+              onChange={handleChange}
+            />
+          )}
         </Grid>
       </Container>
     </main>

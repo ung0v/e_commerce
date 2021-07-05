@@ -10,7 +10,7 @@ import { useDispatch } from "react-redux";
 import {
   removeCartAsync,
   replaceCartAsync,
-} from "../../../features/cart/cart-slice";
+} from "../../features/cart/cart-slice";
 import useStyles from "./style";
 const CartItem = ({ item }) => {
   const classes = useStyles();
